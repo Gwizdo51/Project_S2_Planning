@@ -1,0 +1,114 @@
+body{
+    background-color: #CCE2F3;
+}
+
+
+table{
+    border-radius: 40px;
+}
+
+.tableau{
+    border-collapse: collapse;
+    min-width: 400px;
+    width: 1100px ;
+    height: 700px;
+    box-shadow: 0 5px 50px rgba(0,0,0,0.15);
+    cursor: pointer;
+    margin: 100px auto;
+    border-radius: 20px;
+    border-color: midnightblue;
+    margin-top: 150px;
+
+}
+
+thead tr{
+    background-color: midnightblue;
+    color: #fff;
+    text-align: left;
+}
+
+th, td{
+    padding: 15px 20px;
+}
+
+tbody tr,td,th{
+    border: 1px solid #ddd;
+
+}
+
+tbody{
+    background-color: white;
+    border-radius: 20px;
+}
+
+#first{
+    margin-top: 100px;
+    margin-left: 750px;
+}
+
+#sec{
+    margin-top: 60px;
+    padding: 65px;
+    background-color: #ffffff;
+    width: 450px;
+    height: 150px;
+    border-radius: 20px;
+    border-color: darkblue;
+}
+
+#menu_deroulant{
+    font-size: 20px;
+    padding: 10px;
+    margin-top: 100px;
+    margin-left: 50px;
+    position: absolute;
+
+}
+
+.sah{
+    background-color: white;
+}
+
+.han{
+    background-color: lightblue;
+}
+
+.nad{
+    background-color: lightblue;
+}
+
+.dao{
+    background-color: lightblue;
+}
+
+.oad{
+    background-color: lightblue;
+}
+
+.dat{
+    background-color: lightblue;
+}
+
+.taq{
+    background-color: lightblue;
+}
+
+.qaquinze{
+    background-color: lightblue;
+}
+
+.quinzeaseize{
+    background-color: lightblue;
+}
+
+.seizeads{
+    background-color: lightblue;
+}
+
+.dhadn{
+    background-color: lightblue;
+}
+
+.dhadn{
+    background-color: white;
+}

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Modification des valeurs</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    </head>
+<body>
+
+<body>
+    <form id="form_menu" action="/" method="post">
+        <label for="menu_deroulant"></label>
+        <select id="menu_deroulant" name="menu_deroulant">
+            <option value= 0 >Planning Cabinet</option>
+            <option value=1>Dr. castelianos</option>
+            <option value=2>Dr. ventura</option>
+            <option value=3>Dr. radin</option>
+        </select>
+    </form>
+
+    <script>
+        // Fonction qui envoie automatiquement les données au serveur Flask
+        function envoyerDonnees() {
+            var selectElement = document.getElementById("menu_deroulant");
+            var selectedValue = selectElement.value;
+
+            // Envoi des données au serveur Flask via AJAX
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "/", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.send("menu_deroulant=" + encodeURIComponent(selectedValue));
+        }
+
+        // Écouteur d'événement pour détecter le changement de sélection
+        document.getElementById("menu_deroulant").addEventListener("change", envoyerDonnees);
+    </script>
+
+
+
+    <div id="arp">
+<table class="tableau">
+    <thead>
+    <tr>
+        <th>Lundi</th>
+        <th>Mardi</th>
+        <th>Mercredi</th>
+        <th>Jeudi</th>
+        <th>Vendredi</th>
+        <th>Samedi</th>
+    </tr>
+    </thead>
+
+    <tbody>
+        <tr>
+            <td class="sah"></td>
+            <td class="sah"></td>
+            <td class="sah"></td>
+            <td class="sah"></td>
+            <td class="sah"></td>
+            <td class="sah"></td>
+        </tr>
+        <tr>
+            <td class="han">{{dt}}</td>
+            <td class="han">{{dt}}</td>
+            <td class="han">{{dt}}</td>
+            <td class="han">{{dt}}</td>
+            <td class="han">{{dt}}</td>
+            <td class="han">{{dt}}</td>
+        </tr>
+        <tr>
+            <td class="nad">{{dt}}</td>
+            <td class="nad">{{dt}}</td>
+            <td class="nad">{{dt}}</td>
+            <td class="nad">{{dt}}</td>
+            <td class="nad">{{dt}}</td>
+            <td class="nad">{{dt}}</td>
+        </tr>
+        <tr>
+            <td class="dao">{{dt}}</td>
+            <td class="dao">{{dt}}</td>
+            <td class="dao">argent</td>
+            <td class="dao">argent</td>
+            <td class="dao">{{dt}}</td>
+            <td class="dao">argent</td>
+        </tr>
+        <tr>
+            <td class="oad">argent</td>
+            <td class="oad">argent</td>
+            <td class="oad">argent</td>
+            <td class="oad">argent</td>
+            <td class="oad">argent</td>
+            <td class="oad">argent</td>
+        </tr>
+        <tr>
+            <td class="dat">argent</td>
+            <td class="dat">argent</td>
+            <td class="dat">argent</td>
+            <td class="dat">argent</td>
+            <td class="dat">argent</td>
+            <td class="dat">argent</td>
+        </tr>
+        <tr>
+            <td class="taq">argent</td>
+            <td class="taq">argent</td>
+            <td class="taq">argent</td>
+            <td class="taq">argent</td>
+            <td class="taq">argent</td>
+            <td class="taq">argent</td>
+        </tr>
+        <tr>
+            <td class="qaquinze">argent</td>
+            <td class="qaquinze">argent</td>
+            <td class="qaquinze">argent</td>
+            <td class="qaquinze">argent</td>
+            <td class="qaquinze">argent</td>
+            <td class="qaquinze">argent</td>
+        </tr>
+        <tr>
+            <td class="quinzeaseize">argent</td>
+            <td class="quinzeaseize">argent</td>
+            <td class="quinzeaseize">argent</td>
+            <td class="quinzeaseize">argent</td>
+            <td class="quinzeaseize">argent</td>
+            <td class="quinzeaseize">argent</td>
+        </tr>
+        <tr>
+            <td class="seizeads">argent</td>
+            <td class="seizeads">argent</td>
+            <td class="seizeads">argent</td>
+            <td class="seizeads">argent</td>
+            <td class="seizeads">argent</td>
+            <td class="seizeads">argent</td>
+        </tr>
+        <tr>
+            <td class="dhadn"></td>
+            <td class="dhadn"></td>
+            <td class="dhadn"></td>
+            <td class="dhadn"></td>
+            <td class="dhadn"></td>
+            <td class="dhadn"></td>
+        </tr>
+
+    </tbody>
+</table>
+</div>
+</body>
+</html>

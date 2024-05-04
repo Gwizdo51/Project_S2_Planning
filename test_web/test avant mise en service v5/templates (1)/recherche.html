@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>DocTime</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div id="first"><form action="" method="post">
+    <h1>Recherche d'étudiants</h1>
+    <label for="nom">Entrez un nom : </label>
+    <input type="text" name="nom" id="nom" required>
+    <input type="submit" value="Chercher" >
+</form>
+
+<div id="sec">
+
+{% if etudiant is not none %}
+    {% if etudiant|length == 0 %}
+        <p>Aucun élève ne correspond à la recherche.</p>
+    {% else %}
+        <p>Voici les élèves trouvés :</p>
+        <ul>
+            {% for etudiant in etudiant %}
+                <li>{{ etudiant[0] }} | {{ etudiant[1] }} | {{ etudiant[2] }} | {{ etudiant[3] }} | {{ etudiant[4] }} | {{ etudiant[5] }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endif %}
+
+</div>
+</div>
+</body>
+</html>
