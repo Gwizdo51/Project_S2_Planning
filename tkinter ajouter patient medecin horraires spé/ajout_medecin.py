@@ -10,7 +10,7 @@ root.minsize(width=600, height=500)
 
 ####################################################################################################
 
-#fonction pour recuperer le contenue des champs de saisie / les stock / les affiche
+# fonction pour recuperer le contenue des champs de saisie / les stock / les affiche
 def recupere_contenu_ajout_medecin():
     nom = champ_nom.get()
     prenom = champ_prenom.get()
@@ -23,9 +23,8 @@ def recupere_contenu_ajout_medecin():
     horaires_vendredi = champ_horaires_vendredi.get()
     horaires_samedi = champ_horaires_samedi.get()
     horaires_dimanche = champ_horaires_dimanche.get()
-    ajout_medecin(nom, prenom, tel, specialite, horaires_lundi, horaires_mardi, horaires_mercredi ,horaires_jeudi ,horaires_vendredi ,horaires_samedi ,horaires_dimanche)
-
-
+    ajout_medecin(nom, prenom, tel, specialite, horaires_lundi, horaires_mardi, horaires_mercredi, horaires_jeudi,
+                  horaires_vendredi, horaires_samedi, horaires_dimanche)
 
 
 # champ de saisie
@@ -51,12 +50,11 @@ champ_horaires_samedi = tk.Entry(root)
 champ_horaires_samedi.pack()
 champ_horaires_dimanche = tk.Entry(root)
 champ_horaires_dimanche.pack()
+champ_horaires_dimanche = tk.Entry(root)
+champ_horaires_dimanche.pack()
 
 # envoyer
 bouton_recuperer = tk.Button(root, text="Récupérer contenu", command=recupere_contenu_ajout_medecin)
 bouton_recuperer.pack()
 
-
-
 root.mainloop()
-

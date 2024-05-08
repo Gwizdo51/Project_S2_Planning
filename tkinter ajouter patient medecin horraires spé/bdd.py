@@ -20,11 +20,21 @@ def ajout_medecin(nom, prenom, num_tel, specialite,horaires_lundi,horaires_mardi
     connexion_mysql.commit()
     connexion_mysql.close()
 
-def ajout_horaires_speciaux(date_debut, date_fin, horaires_lundi, horaires_mardi, horaires_mercredi, horaires_jeudi, horaires_vendredi, horaires_samedi, horaires_dimanche):
+def affichage_nom_medecins(option):
     connexion_mysql = mysql.connect(user='root', password='root', host='127.0.0.1', database='doctime', port=3306)
     curseur = connexion_mysql.cursor()
-    sql_query = "INSERT INTO horaires_speciaux ( date_debut, date_fin, horaires_lundi, horaires_mardi, horaires_mercredi, horaires_jeudi, horaires_vendredi, horaires_samedi, horaires_dimanche) VALUES ( %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-    values = (date_debut, date_fin, horaires_lundi, horaires_mardi, horaires_mercredi, horaires_jeudi, horaires_vendredi, horaires_samedi, horaires_dimanche)
+    requete_sql = "SELECT nom FROM medecin WHERE ref_medecin = %s"
+    curseur.execute(requete_sql, (option,))
+    nom_medecin = curseur.fetchall()
+    connexion_mysql.close()
+    return nom_medecin
+
+
+def ajout_horaires_speciaux(dt_debut,dt_fin,h_lundi,h_mardi,h_mercredi,h_jeudi,h_vendredi,h_samedi,h_dimanche,ref_med):
+    connexion_mysql = mysql.connect(user='root', password='root', host='127.0.0.1', database='doctime', port=3306)
+    curseur = connexion_mysql.cursor()
+    sql_query = "INSERT INTO horaires_speciaux (date_debut, date_fin, horaires_lundi, horaires_mardi, horaires_mercredi, horaires_jeudi, horaires_vendredi, horaires_samedi, horaires_dimanche, ref_medecin) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+    values = (dt_debut, dt_fin, h_lundi, h_mardi, h_mercredi, h_jeudi, h_vendredi, h_samedi, h_dimanche,ref_med)
     curseur.execute(sql_query, values)
     connexion_mysql.commit()
     connexion_mysql.close()
