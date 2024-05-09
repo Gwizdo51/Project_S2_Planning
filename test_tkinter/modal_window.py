@@ -10,6 +10,7 @@ class SecondaryWindow(tk.Toplevel):
         super().__init__(**kwargs)
         self.callback = callback
         self.config(width=300, height=90)
+        # disable resizing
         self.resizable(False, False)
         self.title("Enter your name")
         self.entry_name = ttk.Entry(self)

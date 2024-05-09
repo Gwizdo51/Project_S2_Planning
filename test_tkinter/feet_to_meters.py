@@ -49,6 +49,7 @@ class Application(tk.Tk):
         self.rowconfigure(0, weight=1)
         # main frame
         self.mainframe = ttk.Frame(self, padding="3 3 12 12")
+        # self.mainframe = ttk.Frame(self)
         self.mainframe.grid(column=0, row=0, sticky=(tk.N, tk.W, tk.E, tk.S))
         self.mainframe.columnconfigure(0, weight=1)
         self.mainframe.columnconfigure(2, weight=1)
