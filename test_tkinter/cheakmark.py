@@ -27,6 +27,7 @@ class Application(tk.Tk):
         self.clear_content()
         label = ttk.Label(self, text="Contenu de la page 1")
         label.pack()
+        # ttk.Label(self, text="Contenu de la page 1").pack()
 
     def open_page2(self):
         # Affichage de la page 2 avec un bouton pour la page 4
