@@ -38,3 +38,12 @@ def ajout_horaires_speciaux(dt_debut,dt_fin,h_lundi,h_mardi,h_mercredi,h_jeudi,h
     curseur.execute(sql_query, values)
     connexion_mysql.commit()
     connexion_mysql.close()
+
+def ajout_rdv(date_heure_debut, duree, ref_patient, ref_medecin):
+    connexion_mysql = mysql.connect(user='root', password='root', host='127.0.0.1', database='doctime', port=3306)
+    curseur = connexion_mysql.cursor()
+    sql_query = "INSERT INTO rdv (date_heure_debut, duree, ref_patient, ref_medecin) VALUES (%s, %s, %s, %s)"
+    values = (date_heure_debut, duree, ref_patient, ref_medecin)
+    curseur.execute(sql_query, values)
+    connexion_mysql.commit()
+    connexion_mysql.close()
