@@ -25,3 +25,13 @@ class OngletPlanning(ttk.Frame):
         self.content.grid(column=0, row=0)
         self.columnconfigure(0, weight=1)
         self.rowconfigure(0, weight=1)
+
+        self.button_open = ttk.Button(
+            self,
+            text="Consulter l'état",
+            command=self.open_secondary_window
+        )
+        self.button_open.place(x=50, y=50)
+
+    def open_secondary_window(self):
+        self.secondary_window = ModaleEtatConsultations()
