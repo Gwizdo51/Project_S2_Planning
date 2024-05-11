@@ -14,6 +14,7 @@ class ModaleEtatConsultations(tk.Toplevel):
         self.config(width=800, height=600, bg="#CCE2F3")
         self.resizable(False, False)
         self.title("État des consultations")
+        self.grab_set()
 
         self.label_title = ttk.Label(self, text="État des consultations", font=("Helvetica", 14, "bold"),
                                      background="#CCE2F3")
@@ -21,12 +22,11 @@ class ModaleEtatConsultations(tk.Toplevel):
         self.button_close = ttk.Button(
             self,
             text="❌",  # Bouton "Fermer"
-            command=self.destroy
+            command=self.destroy,
+            width=3
         )
         self.button_close.grid(row=0, column=1, padx=10, pady=10, sticky="e")
 
         self.canvas = tk.Canvas(self, bg="#CCE2F3", highlightthickness=0)
         self.canvas.create_line(0, 10, 1800, 10, fill="#000000")  # Ligne horizontale
         self.canvas.grid(row=1, columnspan=2, sticky="ew")
-
-        self.grab_set()

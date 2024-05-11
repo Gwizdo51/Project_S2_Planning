@@ -19,19 +19,32 @@ from lib.frontend.modales_planning.modifier_horaires import ModaleModifierHorair
 class OngletPlanning(ttk.Frame):
 
     def __init__(self, master, bdd_manager: BDDManager):
-        super().__init__(master, borderwidth=10, relief="solid")
+        super().__init__(master, borderwidth=10, relief="solid" )
         self.bdd_manager = bdd_manager
         self.content = ttk.Label(self, text="Contenu de l'onglet Planning")
         self.content.grid(column=0, row=0)
         self.columnconfigure(0, weight=1)
         self.rowconfigure(0, weight=1)
 
-        self.button_open = ttk.Button(
+        self.button_open = tk.Button(
             self,
-            text="Consulter l'état",
-            command=self.open_secondary_window
+            text="état de consultation",
+            command=self.open_etat_consultation,
+            font=("Arial", 12), background="#305F82", bd=0, relief="flat", width=16, height=2
         )
-        self.button_open.place(x=50, y=50)
+        self.button_open.place(x=30, y=250)
 
-    def open_secondary_window(self):
+        self.button_nouveau_rdv = tk.Button(
+            self,
+            text="Nouveaux RDV",
+            command=self.open_nouveau_rdv,
+            font=("Arial", 12), background="#305F82", bd=0, relief="flat", width=16, height=2
+        )
+        self.button_nouveau_rdv.place(x=30, y=150)
+
+
+    def open_etat_consultation(self):
         self.secondary_window = ModaleEtatConsultations()
+
+    def open_nouveau_rdv(self):
+        self.secondary_window = ModaleNouveauRDV()
