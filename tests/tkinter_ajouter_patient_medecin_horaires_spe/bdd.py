@@ -47,3 +47,35 @@ def ajout_rdv(date_heure_debut, duree, ref_patient, ref_medecin):
     curseur.execute(sql_query, values)
     connexion_mysql.commit()
     connexion_mysql.close()
+
+def supprimer_rdv(ref_patient):
+    connexion_mysql = mysql.connect(user='root', password='root', host='127.0.0.1', database='doctime', port=3306)
+    curseur = connexion_mysql.cursor()
+    sql_query = "DELETE FROM rdv WHERE ref_patient = %s"
+    curseur.execute(sql_query, (ref_patient,))
+    connexion_mysql.commit()
+    connexion_mysql.close()
+
+def supprimer_patient(ref_patient):
+    connexion_mysql = mysql.connect(user='root', password='root', host='127.0.0.1', database='doctime', port=3306)
+    curseur = connexion_mysql.cursor()
+    sql_query = "DELETE FROM patient WHERE ref_patient = %s"
+    curseur.execute(sql_query, (ref_patient,))
+    connexion_mysql.commit()
+    connexion_mysql.close()
+
+def supprimer_medic(ref_medecin):
+    connexion_mysql = mysql.connect(user='root', password='root', host='127.0.0.1', database='doctime', port=3306)
+    curseur = connexion_mysql.cursor()
+    sql_query = "DELETE FROM medecin WHERE ref_medecin = %s"
+    curseur.execute(sql_query, (ref_medecin,))
+    connexion_mysql.commit()
+    connexion_mysql.close()
+
+def supprimer_ref_hor_spe(ref_hor_spe):
+    connexion_mysql = mysql.connect(user='root', password='root', host='127.0.0.1', database='doctime', port=3306)
+    curseur = connexion_mysql.cursor()
+    sql_query = "DELETE FROM horaires_speciaux WHERE ref_hor_spe = %s"
+    curseur.execute(sql_query, (ref_hor_spe,))
+    connexion_mysql.commit()
+    connexion_mysql.close()
