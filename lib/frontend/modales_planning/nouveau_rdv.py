@@ -92,7 +92,8 @@ class ModaleNouveauRDV(tk.Toplevel):
         self.button_stocker.grid(row=5, column=0, padx=10, pady=10, sticky="we")
 
     def open_nouveau_patient(self):
-        self.secondary_window = ModaleNouveauPatient()
+        self.grab_release()  # Annuler le grab_set
+        self.secondary_window = ModaleNouveauPatient(self.bdd_manager)
 
     def stocker_duree(self):
         if self.entry_duree.get() != self.default_duree_text:
@@ -127,10 +128,10 @@ class ModaleNouveauRDV(tk.Toplevel):
 
         ref_medecin = "1"  # comment récup le medecin sélectionné ?
 
-        print("Date et heure de début:", self.date_heure_debut)
-        print("Durée:", self.duree)
-        print("ID du patient sélectionné:", ref_patient)
-        print("ID du médecin:", ref_medecin)
+        # print("Date et heure de début:", self.date_heure_debut)
+        # print("Durée:", self.duree)
+        # print("ID du patient sélectionné:", ref_patient)
+        # print("ID du médecin:", ref_medecin)
 
         # ajouter RDV
         self.bdd_manager.ajout_rdv(self.date_heure_debut, self.duree, ref_patient, ref_medecin)
