@@ -11,6 +11,7 @@ from lib.bdd_manager import BDDManager
 
 
 class ModaleEtatConsultations(tk.Toplevel):
+
     def __init__(self, bdd_manager: BDDManager, **kwargs):
         super().__init__(**kwargs)
         self.bdd_manager = bdd_manager
@@ -18,7 +19,7 @@ class ModaleEtatConsultations(tk.Toplevel):
         self.resizable(False, False)
         self.title("État des consultations")
         self.grab_set()
-
+        self.focus()
         self.label_title = ttk.Label(self, text="État des consultations", font=("Helvetica", 14, "bold"),
                                      background="#CCE2F3")
         self.label_title.grid(row=0, column=0, padx=10, pady=10, sticky="w")
@@ -29,7 +30,6 @@ class ModaleEtatConsultations(tk.Toplevel):
             width=3
         )
         self.button_close.grid(row=0, column=1, padx=10, pady=10, sticky="e")
-
         self.canvas = tk.Canvas(self, bg="#CCE2F3", highlightthickness=0)
         self.canvas.create_line(0, 10, 1800, 10, fill="#000000")  # Ligne horizontale
         self.canvas.grid(row=1, columnspan=2, sticky="ew")
