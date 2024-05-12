@@ -128,6 +128,8 @@ class ModaleNouveauRDV(tk.Toplevel):
 
         ref_medecin = "1"  # comment récup le medecin sélectionné ?
 
+
+
         # print("Date et heure de début:", self.date_heure_debut)
         # print("Durée:", self.duree)
         # print("ID du patient sélectionné:", ref_patient)

@@ -4,6 +4,7 @@ import sys
 from pathlib import Path
 from lib.bdd_manager import BDDManager
 from lib.frontend.utils import LabeledEntry
+import tkinter.messagebox as mb  #géré message d'erreur
 
 ROOT_DIR_PATH = str(Path(__file__).resolve().parents[3])
 if ROOT_DIR_PATH not in sys.path:
@@ -61,6 +62,10 @@ class ModaleNouveauPatient(tk.Toplevel):
         nom_patient = self.entry_nom.get() if self.entry_nom.get() != self.entry_nom.label else ""
         prenom_patient = self.entry_prenom.get() if self.entry_prenom.get() != self.entry_prenom.label else ""
         tel_patient = self.entry_tel.get() if self.entry_tel.get() != self.entry_tel.label else ""
+
+        if len(nom_patient) == 0 or len(prenom_patient) == 0 or len(tel_patient) != 10:  # message d'erreur
+            mb.showerror("Erreur de saisie", "Veuillez remplir correctement tous les champs (nom, prénom, téléphone).")
+            return
 
         print("Nom:", nom_patient)
         print("Prénom:", prenom_patient)
