@@ -102,8 +102,7 @@ class OngletPlanning(ttk.Frame):
             self.button_nouveau_rdv["state"] = "normal"
 
     def modale_nouveau_rdv(self):
-        # ModaleNouveauRDV(self.bdd_manager)
-        pass
+        ModaleNouveauRDV(self.bdd_manager)
 
     def modale_modifier_horaires(self):
         # ModaleModifierHoraires(self.bdd_manager)

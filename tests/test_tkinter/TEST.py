@@ -94,7 +94,7 @@ radio_3.config(command=lambda: desactiver_autres_boutons(radio_3, [radio_1, radi
 # Création du champ de saisie avec le texte par défaut pour le prénom
 entree_prenom = tk.Entry(frame_principal, width=30)
 entree_prenom.pack(pady=10)
-configurer_entree(entree_prenom, "Prénom")
+configurer_entree(entree_prenom, "Prénommmm")
 
 # Création du champ de saisie avec le texte par défaut pour le nom
 entree_nom = tk.Entry(frame_principal, width=30)
