@@ -14,8 +14,8 @@ class ModaleEtatConsultations(tk.Toplevel):
 
     def __init__(self, bdd_manager: BDDManager, **kwargs):
         super().__init__(**kwargs)
-        self.bdd_manager = bdd_manager
         self.config(width=800, height=600, bg="#CCE2F3")
+        self.bdd_manager = bdd_manager
         self.resizable(False, False)
         self.title("État des consultations")
         self.grab_set()
