@@ -42,9 +42,15 @@ class ModaleNouveauRDV(tk.Toplevel):
         self.patient_names = [patient["nom"] for patient in patients]
         self.patient_ids = [patient["ref_patient"] for patient in patients]
 
+        self.patient_names.insert(0, "Sélectionnez un patient")  # Ajouter le premier élément
         self.selected_patient = tk.StringVar(self)
-        self.selected_patient.set("Sélectionnez un patient")
-        self.patient_dropdown = ttk.OptionMenu(self, self.selected_patient, *self.patient_names)
+        self.selected_patient.set(self.patient_names[0])  # Sélectionner le premier élément par défaut
+        self.patient_dropdown = ttk.OptionMenu(
+            self,
+            self.selected_patient,
+            *self.patient_names,
+            command=self.update_patient_selected
+        )
         self.patient_dropdown.grid(row=0, column=0, padx=10, pady=10, sticky="w")
 
         self.button_new_patient = ttk.Button(
@@ -90,6 +96,9 @@ class ModaleNouveauRDV(tk.Toplevel):
             style="Custom.TButton",
         )
         self.button_stocker.grid(row=5, column=0, padx=10, pady=10, sticky="we")
+
+    def update_patient_selected(self, event):
+        self.selected_patient.set(event)  # Mettre à jour la variable StringVar avec la valeur sélectionnée
 
     def open_nouveau_patient(self):
         self.grab_release()  # Annuler le grab_set
