@@ -2,13 +2,15 @@ import tkinter as tk
 from tkinter import ttk
 import sys
 from pathlib import Path
+from lib.bdd_manager import BDDManager
+from lib.frontend.modales_medecins.nouveau_medecin import ModaleNouveauMedecin
+from lib.frontend.modales_medecins.modifier_medecin import ModaleModifierMedecin
 
 ROOT_DIR_PATH = str(Path(__file__).resolve().parents[2])
 if ROOT_DIR_PATH not in sys.path:
     sys.path.insert(0, ROOT_DIR_PATH)
 
-from lib.bdd_manager import BDDManager
-from lib.frontend.modales_medecins.nouveau_medecin import ModaleNouveauMedecin
+
 
 class OngletMedecins(ttk.Frame):
 
@@ -62,6 +64,13 @@ class OngletMedecins(ttk.Frame):
         )
         self.button_new_medecin.grid(row=8, column=10, padx=10, pady=10, sticky="w")
 
+        self.button_modif_medecin = ttk.Button(
+            self,
+            text="Modifier médecin",
+            command=self.open_modif_medecin
+        )
+        self.button_modif_medecin.grid(row=8, column=9, padx=10, pady=10, sticky="w")
+
     def update_medecin_selected(self, medecin_selected):
         medecins = self.bdd_manager.get_all_medecins()
         for medecin in medecins:
@@ -73,3 +82,6 @@ class OngletMedecins(ttk.Frame):
                 break
     def open_nouveau_medecin(self):
         ModaleNouveauMedecin(self.bdd_manager)
+    def open_modif_medecin(self):
+        ModaleModifierMedecin(self.bdd_manager)
+

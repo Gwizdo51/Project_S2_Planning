@@ -128,6 +128,15 @@ class BDDManager:
         self.curseur.close()
         self.connexion_mysql.close()
 
+    def modifier_medecin(self, nv_nom, nv_prenom, nv_num_tel, nv_specialite, nv_horaire_lundi, nv_horaire_mardi,
+                         nv_horaire_mercredi, nv_horaire_jeudi, nv_horaire_vendredi, nv_horaire_samedi,
+                         nv_horaire_dimanche, ref_medecin):
+        sql_query = "UPDATE medecin SET nom = %s, prenom = %s, num_tel = %s, specialite = %s, horaires_lundi = %s, horaires_mardi = %s, horaires_mercredi = %s, horaires_jeudi = %s, horaires_vendredi = %s, horaires_samedi = %s, horaires_dimanche = %s WHERE ref_medecin = %s"
+        self.curseur.execute(sql_query, (
+            nv_nom, nv_prenom, nv_num_tel, nv_specialite, nv_horaire_lundi, nv_horaire_mardi, nv_horaire_mercredi,
+            nv_horaire_jeudi, nv_horaire_vendredi, nv_horaire_samedi, nv_horaire_dimanche, ref_medecin))
+        self.connexion_mysql.commit()
+
 
 if __name__ == "__main__":
     # tests
