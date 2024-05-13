@@ -2,6 +2,8 @@ import tkinter as tk
 from tkinter import ttk
 import sys
 from pathlib import Path
+from tkinter import messagebox #géré message d'erreur
+from lib.bdd_manager import BDDManager
 
 ROOT_DIR_PATH = str(Path(__file__).resolve().parents[3])
 if ROOT_DIR_PATH not in sys.path:
@@ -9,4 +11,10 @@ if ROOT_DIR_PATH not in sys.path:
 
 
 class ModaleModifierPatient(tk.Toplevel):
-    pass
+    def __init__(self, bdd_manager: BDDManager, **kwargs):
+        super().__init__(**kwargs)
+        self.config(width=800, height=600, bg="#9BBFDA")
+        self.bdd_manager = bdd_manager
+        self.resizable(False, False)
+        self.title("Modifier Patient")
+        self.grab_set()
