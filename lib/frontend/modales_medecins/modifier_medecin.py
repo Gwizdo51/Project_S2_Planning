@@ -34,16 +34,16 @@ class ModaleModifierMedecin(tk.Toplevel):
         )
         self.medecin_dropdown.grid(row=0, column=0, padx=10, pady=10, sticky="w")
 
-        self.label_nom = ttk.Label(self, text="Nom:")
+        self.label_nom = ttk.Label(self, text="Nom:", background="#9BBFDA")
         self.label_nom.grid(row=1, column=0, padx=10, pady=10, sticky="w")
 
-        self.label_prenom = ttk.Label(self, text="Prénom:")
+        self.label_prenom = ttk.Label(self, text="Prénom:", background="#9BBFDA")
         self.label_prenom.grid(row=2, column=0, padx=10, pady=10, sticky="w")
 
-        self.label_specialite = ttk.Label(self, text="Spécialité:")
+        self.label_specialite = ttk.Label(self, text="Spécialité:", background="#9BBFDA")
         self.label_specialite.grid(row=3, column=0, padx=10, pady=10, sticky="w")
 
-        self.label_num_tel = ttk.Label(self, text="Numéro de téléphone:")
+        self.label_num_tel = ttk.Label(self, text="Numéro de téléphone:", background="#9BBFDA")
         self.label_num_tel.grid(row=4, column=0, padx=10, pady=10, sticky="w")
 
         self.entry_nom = ttk.Entry(self)
