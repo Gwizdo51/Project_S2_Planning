@@ -30,7 +30,7 @@ class BDDManager:
         # civilité :
         # 0 : Monsieur
         # 1 : Madame
-        # 2 : Mademoiselle
+        # 2 : Non-Binaire
         sql_query = "INSERT INTO patient (nom, prenom, num_tel, civilite) VALUES (%s, %s, %s, %s)"
         values = (nom, prenom, num_tel, civilite)
         self.curseur.execute(sql_query, values)

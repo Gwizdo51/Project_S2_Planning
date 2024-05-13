@@ -38,6 +38,9 @@ class OngletPatients(ttk.Frame):
         self.label_prenom = ttk.Label(self, text="Prénom:")
         self.label_prenom.grid(row=2, column=0, padx=10, pady=10, sticky="w")
 
+        self.label_civilite = ttk.Label(self, text="Civilité:")
+        self.label_civilite.grid(row=3, column=0, padx=10, pady=10, sticky="w")
+
         self.label_num_tel = ttk.Label(self, text="Numéro de téléphone:")
         self.label_num_tel.grid(row=4, column=0, padx=10, pady=10, sticky="w")
 
@@ -46,6 +49,9 @@ class OngletPatients(ttk.Frame):
 
         self.label_prenom_patient = ttk.Label(self)
         self.label_prenom_patient.grid(row=2, column=1, padx=10, pady=10, sticky="w")
+
+        self.label_civilite_patient = ttk.Label(self)
+        self.label_civilite_patient.grid(row=3, column=1, padx=10, pady=10, sticky="w")
 
         self.label_num_tel_patient = ttk.Label(self)
         self.label_num_tel_patient.grid(row=4, column=1, padx=10, pady=10, sticky="w")
@@ -64,6 +70,13 @@ class OngletPatients(ttk.Frame):
             if patient["nom"] == patient_selected:
                 self.label_nom_patient.config(text=patient["nom"])
                 self.label_prenom_patient.config(text=patient["prenom"])
+                # Affichage de la civilité en fonction de la valeur stockée dans la base de données
+                if patient["civilite"] == 1:
+                    self.label_civilite_patient.config(text="Homme")
+                elif patient["civilite"] == 2:
+                    self.label_civilite_patient.config(text="Femme")
+                else:
+                    self.label_civilite_patient.config(text="Non-binaire")
                 self.label_num_tel_patient.config(text=patient["num_tel"])
                 break
 
