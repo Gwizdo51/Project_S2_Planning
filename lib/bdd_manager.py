@@ -92,6 +92,17 @@ class BDDManager:
         nom_medecin = self.curseur.fetchall()
         return nom_medecin
 
+    def historique(self):
+        requete_sql = """
+            SELECT m.nom, m.prenom, COUNT(r.ref_rdv) AS nb_rdv, SEC_TO_TIME(SUM(TIME_TO_SEC(r.duree))) AS duree_totale
+            FROM RDV r
+            JOIN medecin m ON r.ref_medecin = m.ref_medecin
+            GROUP BY m.ref_medecin;
+        """
+        self.curseur.execute(requete_sql)
+        resultats = self.curseur.fetchall()
+        return resultats
+
     def ajout_horaires_speciaux(self, dt_debut,dt_fin,h_lundi,h_mardi,h_mercredi,h_jeudi,h_vendredi,h_samedi,h_dimanche,ref_med):
         sql_query = "INSERT INTO horaires_speciaux (date_debut, date_fin, horaires_lundi, horaires_mardi, horaires_mercredi, horaires_jeudi, horaires_vendredi, horaires_samedi, horaires_dimanche, ref_medecin) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
         values = (dt_debut, dt_fin, h_lundi, h_mardi, h_mercredi, h_jeudi, h_vendredi, h_samedi, h_dimanche,ref_med)
