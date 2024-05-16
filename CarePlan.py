@@ -20,6 +20,7 @@ class Application(tk.Tk):
     def __init__(self):
         super().__init__()
         self.bdd_manager = BDDManager()
+        self.config( bg="#9BBFDA")
         self.title("CarePlan")
         # taille de la fenêtre
         self.geometry("800x600")
