@@ -108,4 +108,6 @@ class ModaleModifierMedecin(tk.Toplevel):
                                           self.horaire_mercredi, self.horaire_jeudi, self.horaire_vendredi,
                                           self.horaire_samedi, self.horaire_dimanche, self.selected_medecin_id)
 
+        self.destroy()
+
 

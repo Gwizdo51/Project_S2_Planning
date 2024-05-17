@@ -65,3 +65,5 @@ class ModaleNouveauMedecin(tk.Toplevel):
 
         # ajouter RDV
         self.bdd_manager.ajout_medecin(nom_medecin, prenom_medecin, tel_medecin, spe_medecin)
+
+        self.destroy()

@@ -110,3 +110,5 @@ class ModaleModifierPatient(tk.Toplevel):
 
         # Enregistrer les modifications dans la base de données
         self.bdd_manager.modifier_patient(nom, prenom, num_tel, civilite, self.selected_patient_id)
+
+        self.destroy()

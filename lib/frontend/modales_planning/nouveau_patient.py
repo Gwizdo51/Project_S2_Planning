@@ -4,7 +4,7 @@ import sys
 from pathlib import Path
 from lib.bdd_manager import BDDManager
 from lib.frontend.utils import LabeledEntry
-import tkinter.messagebox as mb  #géré message d'erreur
+import tkinter.messagebox as mb  # For error message handling
 
 ROOT_DIR_PATH = str(Path(__file__).resolve().parents[3])
 if ROOT_DIR_PATH not in sys.path:
@@ -17,13 +17,13 @@ class ModaleNouveauPatient(tk.Toplevel):
         self.config(width=800, height=600, bg="#9BBFDA")
         self.bdd_manager = bdd_manager
         self.resizable(False, False)
-        self.title("Nouveaux Patient")
+        self.title("Nouveau Patient")
         self.grab_set()
         self.nom_patient = ""
         self.prenom_patient = ""
         self.tel_patient = ""
 
-        # Ajout des boutons radio pour la civilité -------------
+        # Adding radio buttons for civil status -------------
         self.civilite_label = ttk.Label(self, text="Civilité")
         self.civilite_label.grid(row=0, column=0, padx=10, pady=10, sticky="w")
 
@@ -39,7 +39,7 @@ class ModaleNouveauPatient(tk.Toplevel):
         self.radio_non_binaire = ttk.Radiobutton(self, text="Non-binaire", variable=self.civilite_var, value=3)
         self.radio_non_binaire.grid(row=0, column=3, padx=10, pady=5, sticky="w")
 
-        # Fin Ajout des boutons radio pour la civilité -------------
+        # End of adding radio buttons for civil status -------------
 
         self.entry_nom = LabeledEntry(self, label="Nom", style="Custom.TEntry")
         self.entry_nom.grid(row=1, column=0, padx=10, pady=10, sticky="w")
@@ -63,7 +63,7 @@ class ModaleNouveauPatient(tk.Toplevel):
         prenom_patient = self.entry_prenom.get() if self.entry_prenom.get() != self.entry_prenom.label else ""
         tel_patient = self.entry_tel.get() if self.entry_tel.get() != self.entry_tel.label else ""
 
-        if len(nom_patient) == 0 or len(prenom_patient) == 0 or len(tel_patient) != 10:  # message d'erreur
+        if len(nom_patient) == 0 or len(prenom_patient) == 0 or len(tel_patient) != 10:  # Error message
             mb.showerror("Erreur de saisie", "Veuillez remplir correctement tous les champs (nom, prénom, téléphone).")
             return
 
@@ -72,5 +72,8 @@ class ModaleNouveauPatient(tk.Toplevel):
         print("Téléphone:", tel_patient)
         print("Civilité:", self.civilite_var.get())
 
-        # ajouter RDV
+        # Add patient to the database
         self.bdd_manager.ajout_patient(nom_patient, prenom_patient, tel_patient, self.civilite_var.get())
+
+        # Close the window after adding the patient
+        self.destroy()

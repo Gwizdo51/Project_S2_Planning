@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 from lib.frontend.modales_planning.nouveau_patient import ModaleNouveauPatient
 from lib.bdd_manager import BDDManager
+import tkinter.messagebox as mb  # For error message handling
 import sys
 from pathlib import Path
 
@@ -9,19 +10,23 @@ ROOT_DIR_PATH = str(Path(__file__).resolve().parents[2])
 if ROOT_DIR_PATH not in sys.path:
     sys.path.insert(0, ROOT_DIR_PATH)
 
+
 def configurer_entree(entree, texte_par_defaut):
     entree.default_text = texte_par_defaut
     entree.insert(0, texte_par_defaut)
     entree.bind("<FocusIn>", lambda event: clear_entry(entree))
     entree.bind("<FocusOut>", lambda event: restore_default_text(entree))
 
+
 def clear_entry(entree):
     if entree.get() == entree.default_text:
         entree.delete(0, tk.END)
 
+
 def restore_default_text(entree):
     if entree.get() == "":
         entree.insert(0, entree.default_text)
+
 
 class ModaleNouveauRDV(tk.Toplevel):
     def __init__(self, bdd_manager: BDDManager, ref_medecin, **kwargs):
@@ -30,7 +35,7 @@ class ModaleNouveauRDV(tk.Toplevel):
         self.bdd_manager = bdd_manager
         self.ref_medecin = ref_medecin
         self.resizable(False, False)
-        self.title("Nouveaux Rendez-vous")
+        self.title("Nouveau Rendez-vous")
         self.grab_set()
         self.secondary_window = None
         self.date = ""
@@ -116,6 +121,11 @@ class ModaleNouveauRDV(tk.Toplevel):
         self.stocker_date()
         self.stocker_date_et_heure_debut()
 
+        if not self.date or not self.heure_debut or not self.duree or self.selected_patient.get() == "Sélectionnez un patient":
+            mb.showerror("Erreur de saisie",
+                         "Veuillez remplir correctement tous les champs (date, heure, durée, patient).")
+            return
+
         selected_index = self.patient_names.index(self.selected_patient.get())
         ref_patient = self.patient_ids[selected_index]
 
@@ -125,3 +135,6 @@ class ModaleNouveauRDV(tk.Toplevel):
         print("ID du médecin:", self.ref_medecin)
 
         self.bdd_manager.ajout_rdv(self.date_heure_debut, self.duree, ref_patient, self.ref_medecin)
+
+        # Close the window after adding the appointment
+        self.destroy()

@@ -11,7 +11,6 @@ if ROOT_DIR_PATH not in sys.path:
     sys.path.insert(0, ROOT_DIR_PATH)
 
 
-
 class OngletMedecins(ttk.Frame):
 
     def __init__(self, master, bdd_manager: BDDManager):
@@ -71,17 +70,46 @@ class OngletMedecins(ttk.Frame):
         )
         self.button_modif_medecin.grid(row=8, column=9, padx=10, pady=10, sticky="w")
 
+        self.button_suppr_medecin = ttk.Button(
+            self,
+            text="Supprimer médecin",
+            command=self.supprimer_medecin
+        )
+        self.button_suppr_medecin.grid(row=8, column=1, padx=10, pady=10, sticky="w")
+
     def update_medecin_selected(self, medecin_selected):
-        medecins = self.bdd_manager.get_all_medecins()
-        for medecin in medecins:
+        for medecin in self.bdd_manager.get_all_medecins():
             if medecin["nom"] == medecin_selected:
                 self.label_nom_medecin.config(text=medecin["nom"])
                 self.label_prenom_medecin.config(text=medecin["prenom"])
                 self.label_specialite_medecin.config(text=medecin["specialite"])
                 self.label_num_tel_medecin.config(text=medecin["num_tel"])
+                self.selected_medecin_id = medecin["ref_medecin"]
                 break
+
     def open_nouveau_medecin(self):
         ModaleNouveauMedecin(self.bdd_manager)
+
     def open_modif_medecin(self):
         ModaleModifierMedecin(self.bdd_manager)
 
+    def supprimer_medecin(self):
+        if hasattr(self, 'selected_medecin_id'):
+            self.bdd_manager.supprimer_medecin(self.selected_medecin_id)
+
+            # Mettre à jour la liste des médecins et l'interface
+            self.medecins = self.bdd_manager.get_all_medecins()
+            self.medecin_names = [medecin["nom"] for medecin in self.medecins]
+            self.medecin_dropdown["menu"].delete(0, "end")
+            for medecin_name in self.medecin_names:
+                self.medecin_dropdown["menu"].add_command(
+                    label=medecin_name,
+                    command=lambda value=medecin_name: self.selected_medecin.set(value)
+                )
+
+            # Réinitialiser les labels
+            self.label_nom_medecin.config(text="")
+            self.label_prenom_medecin.config(text="")
+            self.label_specialite_medecin.config(text="")
+            self.label_num_tel_medecin.config(text="")
+            self.selected_medecin.set("Sélectionnez un médecin")

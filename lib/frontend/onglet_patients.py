@@ -11,15 +11,16 @@ from lib.bdd_manager import BDDManager
 from lib.frontend.modales_patients.modifier_patient import ModaleModifierPatient
 
 
+
 class OngletPatients(ttk.Frame):
 
     def __init__(self, master, bdd_manager: BDDManager):
         super().__init__(master, borderwidth=10, relief="solid")
         self.bdd_manager = bdd_manager
 
-        patients = self.bdd_manager.get_all_patients()
-        self.patient_names = [patient["nom"] for patient in patients]
-        self.patient_ids = [patient["ref_patient"] for patient in patients]
+        self.patients = self.bdd_manager.get_all_patients()
+        self.patient_names = [patient["nom"] for patient in self.patients]
+        self.patient_ids = [patient["ref_patient"] for patient in self.patients]
 
         self.selected_patient = tk.StringVar(self)
         self.selected_patient.set("Sélectionnez un patient")
@@ -56,29 +57,58 @@ class OngletPatients(ttk.Frame):
         self.label_num_tel_patient = ttk.Label(self)
         self.label_num_tel_patient.grid(row=4, column=1, padx=10, pady=10, sticky="w")
 
-
         self.button_modif_patient = ttk.Button(
             self,
             text="Modifier patient",
             command=self.open_modif_patient
         )
-        self.button_modif_patient.grid(row=8, column=9, padx=10, pady=10, sticky="w")
+        self.button_modif_patient.grid(row=8, column=0, padx=10, pady=10, sticky="w")
+
+        self.button_suppr_patient = ttk.Button(
+            self,
+            text="Supprimer patient",
+            command=self.supprimer_patient
+        )
+        self.button_suppr_patient.grid(row=8, column=1, padx=10, pady=10, sticky="w")
 
     def update_patient_selected(self, patient_selected):
-        patients = self.bdd_manager.get_all_patients()
-        for patient in patients:
+        for patient in self.patients:
             if patient["nom"] == patient_selected:
                 self.label_nom_patient.config(text=patient["nom"])
                 self.label_prenom_patient.config(text=patient["prenom"])
                 # Affichage de la civilité en fonction de la valeur stockée dans la base de données
-                if patient["civilite"] == 1:
-                    self.label_civilite_patient.config(text="Homme")
-                elif patient["civilite"] == 2:
-                    self.label_civilite_patient.config(text="Femme")
+                if patient["civilite"] == 0:
+                    self.label_civilite_patient.config(text="Monsieur")
+                elif patient["civilite"] == 1:
+                    self.label_civilite_patient.config(text="Madame")
                 else:
                     self.label_civilite_patient.config(text="Non-binaire")
                 self.label_num_tel_patient.config(text=patient["num_tel"])
+                self.selected_patient_id = patient["ref_patient"]
                 break
 
     def open_modif_patient(self):
         ModaleModifierPatient(self.bdd_manager)
+
+    def supprimer_patient(self):
+        # Supprimer le patient sélectionné dans la base de données
+        if hasattr(self, 'selected_patient_id'):
+            self.bdd_manager.supprimer_patient(self.selected_patient_id)
+
+            # Mettre à jour la liste des patients et l'interface
+            self.patients = self.bdd_manager.get_all_patients()
+            self.patient_names = [patient["nom"] for patient in self.patients]
+            self.patient_dropdown["menu"].delete(0, "end")
+            for patient_name in self.patient_names:
+                self.patient_dropdown["menu"].add_command(
+                    label=patient_name,
+                    command=lambda value=patient_name: self.selected_patient.set(value)
+                )
+
+            # Réinitialiser les labels
+            self.label_nom_patient.config(text="")
+            self.label_prenom_patient.config(text="")
+            self.label_civilite_patient.config(text="")
+            self.label_num_tel_patient.config(text="")
+            self.selected_patient.set("Sélectionnez un patient")
+
