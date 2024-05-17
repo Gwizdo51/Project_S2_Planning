@@ -26,7 +26,7 @@ class LabeledEntry(ttk.Entry):
         # if the color of the text is gray (the label), delete it and write the input in black
         if str(self.cget("foreground")) == "gray":
             # print("default text detected")
-            self.delete(0, "end")
+            self.delete(0, tk.END)
             # self.insert(0, "")
             self.config(foreground="black")
 
