@@ -3,9 +3,9 @@ from tkinter import ttk
 from PIL import Image, ImageTk  # Importer Pillow pour gérer les images
 import sys
 from pathlib import Path
-from datetime import date
 from PIL import ImageTk, Image
-from tkcalendar import Calendar, DateEntry
+from datetime import datetime, timedelta
+from babel.dates import format_date
 
 ROOT_DIR_PATH = str(Path(__file__).resolve().parents[2])
 if ROOT_DIR_PATH not in sys.path:
@@ -18,6 +18,7 @@ from lib.frontend.modales_planning.nouveau_rdv import ModaleNouveauRDV
 # from lib.frontend.modales_planning.nouveau_patient import ModaleNouveauPatient
 from lib.frontend.modales_planning.etat_consultations import ModaleEtatConsultations
 from lib.frontend.modales_planning.modifier_horaires import ModaleModifierHoraires
+from lib.frontend.modales_planning.selection_date import ModaleSelectionDate
 
 class OngletPlanning(ttk.Frame):
 
@@ -46,7 +47,8 @@ class OngletPlanning(ttk.Frame):
             self.planning_selected,
             self.planning_selection_options[0],
             *self.planning_selection_options,
-            command=self.update_planning_selected
+            # command=self.update_planning_selected
+            command=lambda event: self.update_planning_selected()
         )
         self.planning_selection_menu.grid(column=0, row=0, sticky=(tk.W, tk.E))
         # style de boutons multilignes
@@ -82,6 +84,12 @@ class OngletPlanning(ttk.Frame):
         # self.button_test.grid(column=0, row=4, sticky=(tk.E, tk.W))
 
         # création de la frame "date"
+        # récupère la date d'aujourd'hui
+        date_today = datetime.today()
+        # met l'heure à 00:00
+        date_today = datetime(date_today.year, date_today.month, date_today.day)
+        # récupère la date du lundi de la semaine actuelle
+        self.date_monday_week_displayed = date_today - timedelta(days=date_today.weekday())
         # self.frame_date = ttk.Frame(self, borderwidth=2, relief="solid")
         self.frame_date = ttk.Frame(self)
         self.frame_date.grid(column=1, row=0, sticky=(tk.N, tk.W, tk.E, tk.S))
@@ -103,7 +111,7 @@ class OngletPlanning(ttk.Frame):
             self.frame_date_left,
             image=self.icon_left_arrow,
             # text="lol haha",
-            command=""
+            command=self.select_previous_week
         )
         self.button_previous_week.grid(column=1, row=0, sticky=tk.E)
         # bouton "semaine suivante"
@@ -113,24 +121,22 @@ class OngletPlanning(ttk.Frame):
         self.button_next_week = ttk.Button(
             self.frame_date,
             image=self.icon_right_arrow,
-            command=""
+            command=self.select_next_week
         )
         self.button_next_week.grid(column=2, row=0, sticky=tk.W)
         # bouton sélection de date
         # https://www.svgrepo.com/svg/533381/calendar-alt
         self.icon_calendar_pil_img = Image.open(Path(ROOT_DIR_PATH) / "assets" / "icon_calendar.png").resize((20, 20))
         self.icon_calendar = ImageTk.PhotoImage(self.icon_calendar_pil_img)
-        self.button_next_week = ttk.Button(
+        self.button_select_new_week = ttk.Button(
             self.frame_date_left,
             image=self.icon_calendar,
-            command=""
+            # command=self.select_week
+            command=lambda: ModaleSelectionDate(callback=self.select_week)
         )
-        self.button_next_week.grid(column=0, row=0, sticky=tk.W)
+        self.button_select_new_week.grid(column=0, row=0, sticky=tk.W)
         # label d'affichage des dates de la semaine
-        self.label_current_week = ttk.Label(
-            self.frame_date,
-            text="Semaine du XX/XX au XX/XX"
-        )
+        self.label_current_week = ttk.Label(self.frame_date)
         self.label_current_week.grid(column=1, row=0)
 
         # création de la frame "planning"
@@ -140,32 +146,58 @@ class OngletPlanning(ttk.Frame):
         # maj de l'affichage de la page
         self.update_planning_selected()
 
-        # Charger et afficher l'image de fond
-        image_path = Path(__file__).resolve().parent / "planning.png"
-        self.canvas = tk.Canvas(self, width=500, height=500)  # Ajuster les dimensions selon vos besoins
-        self.canvas.grid(column=1, row=0, rowspan=4, sticky=(tk.N, tk.E, tk.S, tk.W))
+        # # Charger et afficher l'image de fond
+        # image_path = Path(__file__).resolve().parent / "planning.png"
+        # self.canvas = tk.Canvas(self, width=500, height=500)  # Ajuster les dimensions selon vos besoins
+        # self.canvas.grid(column=1, row=0, rowspan=4, sticky=(tk.N, tk.E, tk.S, tk.W))
 
-        self.bg_image = Image.open(image_path)
-        self.bg_image = self.bg_image.resize((600, 450), Image.Resampling.LANCZOS)  # Ajuster la taille de l'image
-        self.bg_photo = ImageTk.PhotoImage(self.bg_image)
-        self.canvas.create_image(0, 50, image=self.bg_photo, anchor=tk.NW)  # Ajuster la coordonnée y pour descendre l'image
+        # self.bg_image = Image.open(image_path)
+        # self.bg_image = self.bg_image.resize((600, 450), Image.Resampling.LANCZOS)  # Ajuster la taille de l'image
+        # self.bg_photo = ImageTk.PhotoImage(self.bg_image)
+        # self.canvas.create_image(0, 50, image=self.bg_photo, anchor=tk.NW)  # Ajuster la coordonnée y pour descendre l'image
 
-        # Ajuster les colonnes et les lignes pour une mise en page correcte
-        self.columnconfigure(0, weight=1)
-        self.columnconfigure(1, weight=3)
-        self.rowconfigure(0, weight=1)
+        # # Ajuster les colonnes et les lignes pour une mise en page correcte
+        # self.columnconfigure(0, weight=1)
+        # self.columnconfigure(1, weight=3)
+        # self.rowconfigure(0, weight=1)
 
-    def update_planning_selected(self, planning_selected=""):
+    def update_planning_selected(self):
+        # met à jour l'état du bouton "Nouveau RDV"
         if self.planning_selected.get() == "Cabinet":
             self.button_nouveau_rdv["state"] = "disabled"
         else:
             self.button_nouveau_rdv["state"] = "normal"
+        # met à jour le label de la semaine affichée
+        # self.label_current_week["text"] = "Semaine du XX/XX/XXXX au XX/XX/XXXX"
+        # print(format_date(date=self.date_monday_week_displayed, format="short", locale="fr_FR"))
+        string_monday = format_date(date=self.date_monday_week_displayed, format="short", locale="fr_FR")
+        date_sunday = self.date_monday_week_displayed + timedelta(days=6)
+        string_sunday = format_date(date=date_sunday, format="short", locale="fr_FR")
+        self.label_current_week["text"] = f"Semaine du {string_monday} au {string_sunday}"
+
+    def select_previous_week(self):
+        # print("select previous week")
+        self.date_monday_week_displayed -= timedelta(days=7)
+        self.update_planning_selected()
+
+    def select_next_week(self):
+        # print("select next week")
+        self.date_monday_week_displayed += timedelta(days=7)
+        self.update_planning_selected()
+
+    def select_week(self, date_selected: datetime):
+        # print("select new week")
+        # ModaleSelectionDate()
+        # print("date sélectionnée:", date_selected)
+        self.date_monday_week_displayed = date_selected - timedelta(days=date_selected.weekday())
+        self.update_planning_selected()
 
     def open_modale_nouveau_rdv(self):
         selected_medecin = self.planning_selected.get()
         ref_medecin = self.medecin_ids.get(selected_medecin, None)
         if ref_medecin:
             ModaleNouveauRDV(self.bdd_manager, ref_medecin=ref_medecin)
+        # print("modale fermée")
 
     def modale_modifier_horaires(self):
         pass
