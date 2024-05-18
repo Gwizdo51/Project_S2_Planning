@@ -4,8 +4,8 @@ from PIL import Image, ImageTk  # Importer Pillow pour gérer les images
 import sys
 from pathlib import Path
 from PIL import ImageTk, Image
-from datetime import datetime, timedelta
-from babel.dates import format_date
+from datetime import datetime, time, timedelta
+# from babel.dates import format_date
 
 ROOT_DIR_PATH = str(Path(__file__).resolve().parents[2])
 if ROOT_DIR_PATH not in sys.path:
@@ -28,6 +28,7 @@ class OngletPlanning(ttk.Frame):
 
         # création de la frame "options"
         self.frame_options = ttk.Frame(self)
+        # self.frame_options = ttk.Frame(self, borderwidth=5, relief="raised")
         self.frame_options.grid(column=0, row=1, sticky=(tk.N, tk.W, tk.E, tk.S))
         self.rowconfigure(1, weight=1)
         # initialisation de la liste des médecins
@@ -47,8 +48,8 @@ class OngletPlanning(ttk.Frame):
             self.planning_selected,
             self.planning_selection_options[0],
             *self.planning_selection_options,
-            # command=self.update_planning_selected
-            command=lambda event: self.update_planning_selected()
+            # command=self.update_planning
+            command=lambda event: self.update_planning()
         )
         self.planning_selection_menu.grid(column=0, row=0, sticky=(tk.W, tk.E))
         # style de boutons multilignes
@@ -90,7 +91,7 @@ class OngletPlanning(ttk.Frame):
         date_today = datetime(date_today.year, date_today.month, date_today.day)
         # récupère la date du lundi de la semaine actuelle
         self.date_monday_week_displayed = date_today - timedelta(days=date_today.weekday())
-        # self.frame_date = ttk.Frame(self, borderwidth=2, relief="solid")
+        # self.frame_date = ttk.Frame(self, borderwidth=5, relief="raised")
         self.frame_date = ttk.Frame(self)
         self.frame_date.grid(column=1, row=0, sticky=(tk.N, tk.W, tk.E, tk.S))
         self.columnconfigure(1, weight=1)
@@ -136,61 +137,134 @@ class OngletPlanning(ttk.Frame):
         )
         self.button_select_new_week.grid(column=0, row=0, sticky=tk.W)
         # label d'affichage des dates de la semaine
-        self.label_current_week = ttk.Label(self.frame_date)
+        self.label_current_week = ttk.Label(self.frame_date, anchor="center", width=41)
         self.label_current_week.grid(column=1, row=0)
 
         # création de la frame "planning"
-        self.frame_planning = ttk.Frame(self)
+        self.frame_planning = ttk.Frame(self, borderwidth=1, relief="sunken")
+        # self.frame_planning = ttk.Frame(self)
         self.frame_planning.grid(column=1, row=1, sticky=(tk.N, tk.W, tk.E, tk.S))
+        # 7 colonnes :
+        # - titres des lignes (les heures)
+        # - jours de la semaine (lundi, mardi ...)
+        # 25 lignes :
+        # - titres des colonnes (jours de la semaine)
+        # - 1 ligne par demi heure, entre 8h00 et 20h00 (12 * 2)
+        # titres des colonnes
+        self.planning_column_titles: list[dict] = []
+        weekdays_names = [
+            "Lundi",
+            "Mardi",
+            "Mercredi",
+            "Jeudi",
+            "Vendredi",
+            "Samedi"
+        ]
+        for weekday_number, weekday_name in enumerate(weekdays_names):
+            # print(weekday_number, weekday_name)
+            column_index = weekday_number + 1
+            # partage l'espace disponible entre les colonnes
+            self.frame_planning.columnconfigure(column_index, weight=1)
+            planning_column_title = {}
+            # ajoute une frame pour chaque titre de colonne
+            planning_column_title["frame"] = ttk.Frame(self.frame_planning, borderwidth=1, relief="solid")
+            planning_column_title["frame"].grid(column=column_index, row=0, sticky=(tk.N, tk.W, tk.E, tk.S))
+            # remplis la largeur disponible avec la frame
+            planning_column_title["frame"].columnconfigure(0, weight=1)
+            # ajoute le label du jour de la semaine
+            planning_column_title["day_name_label"] = ttk.Label(
+                planning_column_title["frame"],
+                text=weekday_name,
+                width=8
+            )
+            planning_column_title["day_name_label"].grid(column=0, row=1, sticky=tk.W)
+            # ajoute le label de la date de la journée
+            planning_column_title["day_date_label"] = ttk.Label(
+                planning_column_title["frame"],
+                foreground="gray"
+            )
+            planning_column_title["day_date_label"].grid(column=0, row=0, sticky=tk.E)
+            self.planning_column_titles.append(planning_column_title)
+        # titres des lignes
+        self.planning_row_titles = []
+        self.planning_row_times = [datetime(
+            year=self.date_monday_week_displayed.year,
+            month=self.date_monday_week_displayed.month,
+            day=self.date_monday_week_displayed.day,
+            hour=8
+        ) + row_number * timedelta(seconds=60*30) for row_number in range(24)]
+        self.planning_row_names = [row_time.strftime("%Hh%M") for row_time in self.planning_row_times]
+        for timestamp_number, timestamp_name in enumerate(self.planning_row_names):
+            # print(timestamp_number, timestamp_name)
+            row_index = timestamp_number + 1
+            # partage l'espace disponible entre les lignes
+            self.frame_planning.rowconfigure(row_index, weight=1)
+            planning_row_title = {}
+            # ajoute une frame toutes les 2 lignes (les heures entières)
+            if timestamp_number % 2 == 0:
+                planning_row_title["frame"] = ttk.Frame(self.frame_planning, borderwidth=1, relief="solid")
+                planning_row_title["frame"].grid(column=0, row=row_index, rowspan=2, sticky=(tk.N, tk.W, tk.E, tk.S))
+                # remplis la hauteur disponible avec les deux lignes suivantes
+                planning_row_title["frame"].rowconfigure(0, weight=1)
+                # ajoute le label de l'heure entière associée
+                planning_row_title["timestamp_label"] = ttk.Label(
+                    planning_row_title["frame"],
+                    text=timestamp_name,
+                    foreground="gray"
+                )
+                planning_row_title["timestamp_label"].grid(column=0, row=0, sticky=tk.N)
+            self.planning_row_titles.append(planning_row_title)
+        # matrice des frames du planning
+        # accès: self.planning_frames_matrix[weekday][timestamp_number]
+        self.planning_frames_matrix = []
+        for column_index in range(6):
+            planning_frames_column = []
+            for row_index in range(24):
+                planning_content_frame = ttk.Frame(self.frame_planning, borderwidth=1, relief="solid")
+                planning_content_frame.grid(column=column_index+1, row=row_index+1, sticky=(tk.N, tk.W, tk.E, tk.S))
+                planning_frames_column.append(planning_content_frame)
+            self.planning_frames_matrix.append(planning_frames_column)
 
         # maj de l'affichage de la page
-        self.update_planning_selected()
+        self.update_planning()
 
-        # # Charger et afficher l'image de fond
-        # image_path = Path(__file__).resolve().parent / "planning.png"
-        # self.canvas = tk.Canvas(self, width=500, height=500)  # Ajuster les dimensions selon vos besoins
-        # self.canvas.grid(column=1, row=0, rowspan=4, sticky=(tk.N, tk.E, tk.S, tk.W))
-
-        # self.bg_image = Image.open(image_path)
-        # self.bg_image = self.bg_image.resize((600, 450), Image.Resampling.LANCZOS)  # Ajuster la taille de l'image
-        # self.bg_photo = ImageTk.PhotoImage(self.bg_image)
-        # self.canvas.create_image(0, 50, image=self.bg_photo, anchor=tk.NW)  # Ajuster la coordonnée y pour descendre l'image
-
-        # # Ajuster les colonnes et les lignes pour une mise en page correcte
-        # self.columnconfigure(0, weight=1)
-        # self.columnconfigure(1, weight=3)
-        # self.rowconfigure(0, weight=1)
-
-    def update_planning_selected(self):
+    def update_planning(self):
         # met à jour l'état du bouton "Nouveau RDV"
         if self.planning_selected.get() == "Cabinet":
             self.button_nouveau_rdv["state"] = "disabled"
         else:
             self.button_nouveau_rdv["state"] = "normal"
         # met à jour le label de la semaine affichée
-        # self.label_current_week["text"] = "Semaine du XX/XX/XXXX au XX/XX/XXXX"
+        # self.label_current_week["text"] = "Semaine n°10, du XX/XX/XXXX au XX/XX/XXXX"
         # print(format_date(date=self.date_monday_week_displayed, format="short", locale="fr_FR"))
-        string_monday = format_date(date=self.date_monday_week_displayed, format="short", locale="fr_FR")
+        # string_monday = format_date(date=self.date_monday_week_displayed, format="short", locale="fr_FR")
+        string_monday = self.date_monday_week_displayed.strftime("%d/%m/%Y")
         date_sunday = self.date_monday_week_displayed + timedelta(days=6)
-        string_sunday = format_date(date=date_sunday, format="short", locale="fr_FR")
-        self.label_current_week["text"] = f"Semaine du {string_monday} au {string_sunday}"
+        # string_sunday = format_date(date=date_sunday, format="short", locale="fr_FR")
+        string_sunday = date_sunday.strftime("%d/%m/%Y")
+        week_number = self.date_monday_week_displayed.isocalendar().week
+        self.label_current_week["text"] = f"Semaine n°{week_number}, du {string_monday} au {string_sunday}"
+        # met à jour la date de chacuns des jours affichés
+        for weekday_number, planning_column_title in enumerate(self.planning_column_titles):
+            planning_column_title["day_date"] = self.date_monday_week_displayed + timedelta(days=weekday_number)
+            planning_column_title["day_date_label"]["text"] = planning_column_title["day_date"].strftime("%d/%m")
 
     def select_previous_week(self):
         # print("select previous week")
         self.date_monday_week_displayed -= timedelta(days=7)
-        self.update_planning_selected()
+        self.update_planning()
 
     def select_next_week(self):
         # print("select next week")
         self.date_monday_week_displayed += timedelta(days=7)
-        self.update_planning_selected()
+        self.update_planning()
 
     def select_week(self, date_selected: datetime):
         # print("select new week")
         # ModaleSelectionDate()
         # print("date sélectionnée:", date_selected)
         self.date_monday_week_displayed = date_selected - timedelta(days=date_selected.weekday())
-        self.update_planning_selected()
+        self.update_planning()
 
     def open_modale_nouveau_rdv(self):
         selected_medecin = self.planning_selected.get()
