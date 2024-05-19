@@ -26,7 +26,7 @@ class LabeledEntry(ttk.Entry):
         # if the color of the text is gray (the label), delete it and write the input in black
         if str(self.cget("foreground")) == "gray":
             # print("default text detected")
-            self.delete(0, "end")
+            self.delete(0, tk.END)
             # self.insert(0, "")
             self.config(foreground="black")
 
@@ -35,3 +35,16 @@ class LabeledEntry(ttk.Entry):
         if not self.get():
             self.insert(0, self.label)
             self.config(foreground="gray")
+
+
+def configure_styles():
+    style = ttk.Style()
+    style.configure("Custom.TEntry", background="blue", padding=[20, 10, 20, 10], font=("Arial", 12))
+    style.configure("Custom.TButton",
+                    foreground="black",
+                    background="blue",
+                    font=("Inter", 12),
+                    padding=[10, 10, 10, 10],
+                    justify="center")
+    style.configure("Multiline.TButton", justify="center")
+    style.configure("Multiline.TRadiobutton", justify="center")

@@ -2,13 +2,14 @@ import tkinter as tk
 from tkinter import ttk
 import sys
 from pathlib import Path
-from lib.bdd_manager import BDDManager
-from lib.frontend.utils import LabeledEntry
 import tkinter.messagebox as mb  # For error message handling
 
 ROOT_DIR_PATH = str(Path(__file__).resolve().parents[3])
 if ROOT_DIR_PATH not in sys.path:
     sys.path.insert(0, ROOT_DIR_PATH)
+
+from lib.bdd_manager import BDDManager
+from lib.frontend.utils import LabeledEntry
 
 
 class ModaleNouveauPatient(tk.Toplevel):

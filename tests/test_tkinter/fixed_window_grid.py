@@ -47,6 +47,13 @@ class Application(tk.Tk):
         # print(self.mainframe["style"])
         # 'winnative', 'clam', 'alt', 'default', 'classic', 'vista', 'xpnative'
         # style.theme_use("xpnative")
+        # add 2 buttons to the same grid place in a frame -> doesn't work
+        # self.frame_1.columnconfigure(0, weight=1)
+        # self.frame_1.rowconfigure(0, weight=1)
+        # self.button_test_1 = ttk.Button(self.frame_1, text="test 1")
+        # self.button_test_1.grid(column=0, row=0, sticky=(tk.N, tk.W))
+        # self.button_test_2 = ttk.Button(self.frame_1, text="test 2")
+        # self.button_test_1.grid(column=0, row=0, sticky=(tk.E, tk.S))
         # run app
         self.mainloop()
 
