@@ -35,11 +35,15 @@ class OngletPlanning(ttk.Frame):
         self.list_medecins = self.bdd_manager.get_all_medecins()
         # création des options de sélection de planning
         self.planning_selection_options = ["Cabinet"]
-        self.medecin_ids = {}
+        # pour chaque médecin ...
         for medecin in self.list_medecins:
-            nom_complet = f"Dr. {medecin['nom']}"
-            self.planning_selection_options.append(nom_complet)
-            self.medecin_ids[nom_complet] = medecin["ref_medecin"]
+            # crée et ajoute leur leur nom affiché
+            name_displayed = f"Dr. {medecin["nom"]}"
+            medecin["nom_affiche"] = name_displayed
+            # ajoute le nom affiché du médecin à la liste de sélection des planning
+            self.planning_selection_options.append(name_displayed)
+        # crée un mapping nom_affiche -> ref_medecin
+        self.medecin_name_displayed_to_ref = {medecin["nom_affiche"]: medecin["ref_medecin"] for medecin in self.list_medecins}
         # menu déroulant de sélection de planning
         self.planning_selected = tk.StringVar()
         self.planning_selected.set(self.planning_selection_options[0])
@@ -52,9 +56,6 @@ class OngletPlanning(ttk.Frame):
             command=lambda event: self.update_planning()
         )
         self.planning_selection_menu.grid(column=0, row=0, sticky=(tk.W, tk.E))
-        # style de boutons multilignes
-        style = ttk.Style()
-        style.configure("Multiline.TButton", justify="center")
         # bouton "Nouveau RDV"
         self.button_nouveau_rdv = ttk.Button(self.frame_options, text="Nouveau RDV", command=self.open_modale_nouveau_rdv)
         self.button_nouveau_rdv.grid(column=0, row=1, sticky=(tk.W, tk.E))
@@ -268,13 +269,14 @@ class OngletPlanning(ttk.Frame):
 
     def open_modale_nouveau_rdv(self):
         selected_medecin = self.planning_selected.get()
-        ref_medecin = self.medecin_ids.get(selected_medecin, None)
-        if ref_medecin:
-            ModaleNouveauRDV(self.bdd_manager, ref_medecin=ref_medecin)
+        ref_medecin = self.medecin_name_displayed_to_ref[selected_medecin]
+        ModaleNouveauRDV(self.bdd_manager, ref_medecin)
         # print("modale fermée")
 
     def modale_modifier_horaires(self):
-        pass
+        planning_selected = self.planning_selected.get()
+        ref_medecin = self.medecin_name_displayed_to_ref.get(planning_selected)
+        ModaleModifierHoraires(self.bdd_manager, ref_medecin, self.update_planning)
 
     def modale_etat_consultation(self):
         ModaleEtatConsultations(self.bdd_manager)

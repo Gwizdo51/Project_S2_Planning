@@ -12,8 +12,9 @@ if ROOT_DIR_PATH not in sys.path:
 
 class ModaleSelectionDate(tk.Toplevel):
 
-    def __init__(self, callback=None, **kwargs):
+    def __init__(self, callback, **kwargs):
         super().__init__(**kwargs)
+        self.title("Sélection de date")
         # taille fixe
         self.resizable(False, False)
         # fonction callback pour update la date sélectionnée

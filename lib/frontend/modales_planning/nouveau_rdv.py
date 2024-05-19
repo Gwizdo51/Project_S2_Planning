@@ -1,7 +1,5 @@
 import tkinter as tk
 from tkinter import ttk
-from lib.frontend.modales_planning.nouveau_patient import ModaleNouveauPatient
-from lib.bdd_manager import BDDManager
 import tkinter.messagebox as mb  # For error message handling
 import sys
 from pathlib import Path
@@ -9,6 +7,9 @@ from pathlib import Path
 ROOT_DIR_PATH = str(Path(__file__).resolve().parents[2])
 if ROOT_DIR_PATH not in sys.path:
     sys.path.insert(0, ROOT_DIR_PATH)
+
+from lib.frontend.modales_planning.nouveau_patient import ModaleNouveauPatient
+from lib.bdd_manager import BDDManager
 
 
 def configurer_entree(entree, texte_par_defaut):
@@ -63,15 +64,6 @@ class ModaleNouveauRDV(tk.Toplevel):
             command=self.open_nouveau_patient
         )
         self.button_new_patient.grid(row=1, column=0, padx=10, pady=10, sticky="w")
-
-        self.style = ttk.Style()
-        self.style.configure("Custom.TEntry", background="blue", padding=[20, 10, 20, 10], font=("Arial", 12))
-        self.style.configure("Custom.TButton",
-                             foreground="black",
-                             background="blue",
-                             font=("Inter", 12),
-                             padding=[10, 10, 10, 10],
-                             justify="center")
 
         self.entry_date = ttk.Entry(self, style="Custom.TEntry")
         self.entry_date.grid(row=2, column=0, padx=10, pady=10, sticky="w")
