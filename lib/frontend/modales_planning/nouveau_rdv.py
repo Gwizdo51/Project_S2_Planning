@@ -119,7 +119,7 @@ class ModaleNouveauRDV(tk.Toplevel):
             return
 
         selected_index = self.patient_names.index(self.selected_patient.get())
-        ref_patient = self.patient_ids[selected_index]
+        ref_patient = self.patient_ids[selected_index - 1]
 
         print("Date et heure de début:", self.date_heure_debut)
         print("Durée:", self.duree)
